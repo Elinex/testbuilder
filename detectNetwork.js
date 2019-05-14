@@ -7,6 +7,14 @@
 //   1. The first few numbers (called the prefix)
 //   2. The number of digits in the number (called the length)
 
+var numGenerator = function(start, end){
+  var p = []
+  for (var i = start; i <= end; i++ ){
+    p.push(i)
+  }
+  return p
+}
+
 var cardInfo = [
   {
     name: "Visa",
@@ -37,7 +45,19 @@ var cardInfo = [
     name: "Maestro",
     l: [12, 13, 14, 15, 16, 17, 18, 19],
     p: ['5018', '5020', '5038', '6304']
-  }
+  },
+  {
+    name: "China UnionPay",
+    l: numGenerator(16, 19),
+    p: (numGenerator(624, 626).concat(
+      numGenerator(6282, 6288),
+      numGenerator(622126, 622925)))
+  },
+  {
+    name: "Switch",
+    l: numGenerator(16, 18, 19),
+    p: [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759]
+  },
 ]
 
 var detectNetwork = function(cardNumber) {
@@ -58,6 +78,10 @@ var detectNetwork = function(cardNumber) {
       return cardName.push(card.name)
     }
   })
+
+  if (cardName.includes('Visa' && 'Switch')){
+    return 'Switch'
+  }
 
   return cardName[0]
 
