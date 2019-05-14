@@ -1,6 +1,15 @@
 
 var FILL_ME_IN = 'Fill this value in';
 
+var numGenerator = function(start, end){
+  var p = []
+  for (var i = start; i <= end; i++ ){
+    const numToString = i.toString()
+    p.push(numToString)
+  }
+  return p
+}
+
 describe('Diner\'s Club', function() {
 
   it('has a prefix of 38 and a length of 14', function() {
@@ -76,23 +85,13 @@ describe('MasterCard', function() {
     (detectNetwork('5312345678901234')).should.equal('MasterCard');
   });
 
-
-  // You can also use should instead of expect, which changes the style
-  // slightly. It really doesn't matter which one you use - check out
-  // http://chaijs.com/guide/styles/ for more info, but it's important
-  // to be consistent (unlike in this file, where we use BOTH expect
-  // and should, but that's just for learning), so once you've gotten
-  // these tests to pass using should syntax, refactor your tests to
-  // use either expect or should, but not both.
-  var should = chai.should();
-
   it('has a prefix of 54 and a length of 16', function() {
     detectNetwork('5412345678901234').should.equal('MasterCard');
   });
 
   it('has a prefix of 55 and a length of 16', function() {
     detectNetwork('5512345678901234').should.equal('MasterCard');
-  })
+  });
 
 });
 
@@ -101,15 +100,15 @@ describe('Discover', function(){
     name: "Discover",
     l: [16, 19],
     p: ['65', '644', '645', '646', '647', '648', '649', '6011']
-  }
+  };
 
-  const info = []
+  const info = [];
 
   for (var i = 0; i < card.l.length; i++){
     for (var j = 0; j < card.p.length; j++){
       info.push([card.l[i], card.p[j]])
     }
-  }
+  };
 
   var should = chai.should();
 
@@ -135,15 +134,15 @@ describe('Maestro', function() {
     name: "Maestro",
     l: [12, 13, 14, 15, 16, 17, 18, 19],
     p: ['5018', '5020', '5038', '6304']
-  }
+  };
 
-  const info = []
+  const info = [];
 
   for (var i = 0; i < card.l.length; i++){
     for (var j = 0; j < card.p.length; j++){
       info.push([card.l[i], card.p[j]])
     }
-  }
+  };
 
   var should = chai.should();
 
@@ -161,4 +160,80 @@ describe('Maestro', function() {
       });
     })()
   }
+});
+
+describe('China UnionPay', function() {
+  const card = {
+    name: "China UnionPay",
+    l: numGenerator(16, 19),
+    p: numGenerator(624, 626)
+  };
+
+  // p: (numGenerator(624, 626).concat(
+  //   numGenerator(6282, 6288),
+  //   numGenerator(622126, 622925)))
+
+  const info = [];
+
+  for (var i = 0; i < card.l.length; i++){
+    for (var j = 0; j < card.p.length; j++){
+      info.push([card.l[i], card.p[j]])
+    }
+  };
+
+  var should = chai.should();
+
+  for (var i = 0; i < info.length; i++){
+    var cardNumber = '';
+    console.log(info[i][0] - info[i][1].length);
+    for (var j = 0; j < (info[i][0] - info[i][1].length); j++){
+      var num = ~~(Math.random() * 10);
+      var numToString = num.toString();
+      cardNumber += numToString
+    }
+    (function(){
+      const newCardNumber = info[i][1]+cardNumber;
+      it('has a prefix of ' + info[i][1] + ' and a length of ' + info[i][0], function() {
+        detectNetwork(newCardNumber).should.equal('China UnionPay');
+      });
+    })()
+  }
+});
+
+describe('Switch', function() {
+  // Chai is an entire library of helper functions for tests!
+  // Chai provides an assert that acts the same as our previous assert.
+  // Search the documentation to figure out how to access it.
+  //   http://chaijs.com/
+  var assert = chai.assert;
+
+  const card = {
+    name: "Switch",
+    l: numGenerator(16, 18, 19),
+    p: [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759]
+  };
+
+  const info = [];
+
+  for (var i = 0; i < card.l.length; i++){
+    for (var j = 0; j < card.p.length; j++){
+      info.push([card.l[i], card.p[j]])
+    }
+  };
+
+  for (var i = 0; i < info.length; i++){
+    var cardNumber = '';
+    for (var j = 0; j < (info[i][0] - info[i][1].length); j++){
+      var num = ~~(Math.random() * 10);
+      var numToString = num.toString();
+      cardNumber += numToString
+    }
+    (function(){
+      const newCardNumber = info[i][1]+cardNumber;
+      it('has a prefix of ' + info[i][1] + ' and a length of ' + info[i][0], function() {
+        assert(detectNetwork(newCardNumber) === 'Switch');
+      });
+    })()
+  };
+
 });

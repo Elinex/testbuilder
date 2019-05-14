@@ -10,7 +10,8 @@
 var numGenerator = function(start, end){
   var p = []
   for (var i = start; i <= end; i++ ){
-    p.push(i)
+    const numToString = i.toString()
+    p.push(numToString)
   }
   return p
 }
@@ -48,14 +49,14 @@ var cardInfo = [
   },
   {
     name: "China UnionPay",
-    l: numGenerator(16, 19),
+    l: [16,17,18,19],
     p: (numGenerator(624, 626).concat(
       numGenerator(6282, 6288),
       numGenerator(622126, 622925)))
   },
   {
     name: "Switch",
-    l: numGenerator(16, 18, 19),
+    l: [16,18,19],
     p: [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759]
   },
 ]
