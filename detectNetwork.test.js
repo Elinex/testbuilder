@@ -166,12 +166,10 @@ describe('China UnionPay', function() {
   const card = {
     name: "China UnionPay",
     l: numGenerator(16, 19),
-    p: numGenerator(624, 626)
+    p: (numGenerator(624, 626).concat(
+      numGenerator(6282, 6288),
+      numGenerator(622126, 622925)))
   };
-
-  // p: (numGenerator(624, 626).concat(
-  //   numGenerator(6282, 6288),
-  //   numGenerator(622126, 622925)))
 
   const info = [];
 
@@ -185,7 +183,6 @@ describe('China UnionPay', function() {
 
   for (var i = 0; i < info.length; i++){
     var cardNumber = '';
-    console.log(info[i][0] - info[i][1].length);
     for (var j = 0; j < (info[i][0] - info[i][1].length); j++){
       var num = ~~(Math.random() * 10);
       var numToString = num.toString();
@@ -201,16 +198,10 @@ describe('China UnionPay', function() {
 });
 
 describe('Switch', function() {
-  // Chai is an entire library of helper functions for tests!
-  // Chai provides an assert that acts the same as our previous assert.
-  // Search the documentation to figure out how to access it.
-  //   http://chaijs.com/
-  var assert = chai.assert;
-
   const card = {
     name: "Switch",
-    l: numGenerator(16, 18, 19),
-    p: [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759]
+    l: [16,18,19],
+    p: ['4903', '4905', '4911', '4936', '564182', '633110', '6333',  '6759']
   };
 
   const info = [];
@@ -220,6 +211,8 @@ describe('Switch', function() {
       info.push([card.l[i], card.p[j]])
     }
   };
+
+  var should = chai.should();
 
   for (var i = 0; i < info.length; i++){
     var cardNumber = '';
@@ -231,9 +224,8 @@ describe('Switch', function() {
     (function(){
       const newCardNumber = info[i][1]+cardNumber;
       it('has a prefix of ' + info[i][1] + ' and a length of ' + info[i][0], function() {
-        assert(detectNetwork(newCardNumber) === 'Switch');
+        detectNetwork(newCardNumber).should.equal('Switch');
       });
     })()
-  };
-
+  }
 });
